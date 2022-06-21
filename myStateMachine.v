@@ -1,14 +1,14 @@
 module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display, doorOpen);
     input s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk;
-    output reg [1:0] ac;
-    output reg [1:0] display;
-    output reg doorOpen;
+    output reg [1:0] ac = 2'b00;
+    output reg [1:0] display = 1;
+    output reg doorOpen = 0;
 
-    reg [2:0] reg_f;
-    reg [2:0] reg_u;
-    reg [2:0] reg_d;
+    reg [3:0] reg_f = 0;
+    reg [3:0] reg_u = 0;
+    reg [3:0] reg_d = 0;
 
-    reg [3:0] state = 0;
+    reg [3:0] state = 9;
 
     always @(posedge f1) reg_f[1] = 1;
     always @(posedge f2) reg_f[2] = 1;
@@ -21,10 +21,6 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display
     always @(posedge d3) reg_d[3] = 1;
 
     always @(posedge clk, posedge s1, posedge s2, posedge s3) begin
-        assign ac = 2'b00;
-        assign display = 0;
-        assign doorOpen = 0;
-
         case (state)
             0: begin
                 if (reg_f[2] || reg_f[3] || reg_d[2] || reg_d[3] || reg_u[2] || reg_u[3]) begin
@@ -240,6 +236,12 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display
                     assign ac = 2'b00;
                     assign display = 2;
                     assign doorOpen = 1;
+                end
+                else begin 
+                    state = 8;
+                    assign ac = 2'b00;
+                    assign display = 2;
+                    assign doorOpen = 0;
                 end
             end
         endcase
