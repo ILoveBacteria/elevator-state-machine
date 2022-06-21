@@ -40,6 +40,8 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, ac, display, doo
                         assign ac = 2b'00;
                         assign display = 2;
                         assign doorOpen = 1;
+                        reg_u[2] = 0;
+                        reg_f[2] = 0;
                     end
                     else if (reg_f[3] || reg_u[3] || reg_d[3]) begin
                         state = 3;
@@ -52,6 +54,8 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, ac, display, doo
                         assign ac = 2b'00;
                         assign display = 2;
                         assign doorOpen = 1;
+                        reg_d[2] = 0;
+                        reg_f[2] = 0;
                     end
                 end
             end
@@ -77,6 +81,9 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, ac, display, doo
                     assign ac = 2b'00;
                     assign display = 3;
                     assign doorOpen = 1;
+                    reg_f[3] = 0;
+                    reg_u[3] = 0;
+                    reg_d[3] = 0;
                 end
             end
 
@@ -96,6 +103,8 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, ac, display, doo
                         assign ac = 2b'00;
                         assign display = 2;
                         assign doorOpen = 1;
+                        reg_d[2] = 0;
+                        reg_f[2] = 0;
                     end
                     else if (reg_f[1] || reg_u[1] || reg_d[1]) begin
                         state = 7;
@@ -108,6 +117,8 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, ac, display, doo
                         assign ac = 2b'00;
                         assign display = 2;
                         assign doorOpen = 1;
+                        reg_u[2] = 0;
+                        reg_f[2] = 0;
                     end
                 end
             end
@@ -133,6 +144,9 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, ac, display, doo
                     assign ac = 2b'00;
                     assign display = 1;
                     assign doorOpen = 1;
+                    reg_f[1] = 0;
+                    reg_u[1] = 0;
+                    reg_d[1] = 0;
                 end
             end
 
@@ -142,12 +156,16 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, ac, display, doo
                     assign ac = 2b'00;
                     assign display = 2;
                     assign doorOpen = 1;
+                    reg_u[2] = 0;
+                    reg_f[2] = 0;
                 end
                 else if (reg_f[1] || reg_u[1] || reg_d[1] || reg_d[2]) begin
                     state = 6;
                     assign ac = 2b'00;
                     assign display = 2;
                     assign doorOpen = 1;
+                    reg_d[2] = 0;
+                    reg_f[2] = 0;
                 end
             end
     end
