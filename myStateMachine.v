@@ -1,5 +1,5 @@
-module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display, doorOpen);
-    input s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk;
+module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, rst, ac, display, doorOpen);
+    input s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, rst;
     output reg [1:0] ac = 2'b00;
     output reg [1:0] display = 1;
     output reg doorOpen = 0;
@@ -9,6 +9,7 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display
     reg [3:0] reg_d = 0;
 
     reg [3:0] state = 9;
+    reg [3:0] next_state = 9;
 
     always @(posedge f1) reg_f[1] = 1;
     always @(posedge f2) reg_f[2] = 1;
@@ -20,17 +21,17 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display
     always @(posedge d2) reg_d[2] = 1;
     always @(posedge d3) reg_d[3] = 1;
 
-    always @(posedge clk, posedge s1, posedge s2, posedge s3) begin
+    always @(posedge clk, posedge s1, posedge s2, posedge s3, rst) begin
         case (state)
             0: begin
                 if (reg_f[2] || reg_f[3] || reg_d[2] || reg_d[3] || reg_u[2] || reg_u[3]) begin
-                state = 1;
+                next_state = 1;
                 assign ac = 2'b10;
                 assign display = 1;
                 assign doorOpen = 0;
                 end
                 else begin
-                    state = 9;
+                    next_state = 9;
                     assign ac = 2'b00;
                     assign display = 1;
                     assign doorOpen = 0;
@@ -40,7 +41,7 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display
             1: begin
                 if (s2) begin
                     if (reg_f[2] || reg_u[2]) begin
-                        state = 2;
+                        next_state = 2;
                         assign ac = 2'b00;
                         assign display = 2;
                         assign doorOpen = 1;
@@ -49,13 +50,13 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display
                         reg_d[2] = 0;
                     end
                     else if (reg_f[3] || reg_u[3] || reg_d[3]) begin
-                        state = 3;
+                        next_state = 3;
                         assign ac = 2'b10;
                         assign display = 2;
                         assign doorOpen = 0;
                     end
                     else if (reg_d[2]) begin
-                        state = 6;
+                        next_state = 6;
                         assign ac = 2'b00;
                         assign display = 2;
                         assign doorOpen = 1;
@@ -68,13 +69,13 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display
 
             2: begin
                 if (reg_f[3] || reg_u[3] || reg_d[3]) begin
-                    state = 3;
+                    next_state = 3;
                     assign ac = 2'b10;
                     assign display = 2;
                     assign doorOpen = 0;
                 end
                 else begin
-                    state = 11;
+                    next_state = 11;
                     assign ac = 2'b00;
                     assign display = 2;
                     assign doorOpen = 1;
@@ -83,7 +84,7 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display
 
             3: begin
                 if (s3) begin
-                    state = 4;
+                    next_state = 4;
                     assign ac = 2'b00;
                     assign display = 3;
                     assign doorOpen = 1;
@@ -95,13 +96,13 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display
 
             4: begin
                 if (reg_f[1] || reg_f[2] || reg_d[1] || reg_d[2] || reg_u[1] || reg_u[2]) begin
-                    state = 5;
+                    next_state = 5;
                     assign ac = 2'b01;
                     assign display = 3;
                     assign doorOpen = 0;
                 end
                 else begin
-                    state = 10;
+                    next_state = 10;
                     assign ac = 2'b00;
                     assign display = 3;
                     assign doorOpen = 0;
@@ -111,7 +112,7 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display
             5: begin
                 if (s2) begin
                     if (reg_f[2] || reg_d[2]) begin
-                        state = 6;
+                        next_state = 6;
                         assign ac = 2'b00;
                         assign display = 2;
                         assign doorOpen = 1;
@@ -120,13 +121,13 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display
                         reg_u[2] = 0;
                     end
                     else if (reg_f[1] || reg_u[1] || reg_d[1]) begin
-                        state = 7;
+                        next_state = 7;
                         assign ac = 2'b01;
                         assign display = 2;
                         assign doorOpen = 0;
                     end
                     else if (reg_u[2]) begin
-                        state = 2;
+                        next_state = 2;
                         assign ac = 2'b00;
                         assign display = 2;
                         assign doorOpen = 1;
@@ -139,13 +140,13 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display
 
             6: begin
                 if (reg_f[1] || reg_u[1] || reg_d[1]) begin
-                    state = 7;
+                    next_state = 7;
                     assign ac = 2'b01;
                     assign display = 2;
                     assign doorOpen = 0;
                 end
                 else begin
-                    state = 11;
+                    next_state = 11;
                     assign ac = 2'b00;
                     assign display = 2;
                     assign doorOpen = 1;
@@ -154,7 +155,7 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display
 
             7: begin
                 if (s1) begin
-                    state = 0;
+                    next_state = 0;
                     assign ac = 2'b00;
                     assign display = 1;
                     assign doorOpen = 1;
@@ -166,7 +167,7 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display
 
             8: begin
                 if (reg_d[2] || reg_u[2] || reg_d[2]) begin
-                    state = 11;
+                    next_state = 11;
                     assign ac = 2'b00;
                     assign display = 2;
                     assign doorOpen = 1;
@@ -175,13 +176,13 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display
                     reg_u[2] = 0;
                 end
                 else if (reg_f[1] || reg_u[1] || reg_d[1]) begin
-                    state = 7;
+                    next_state = 7;
                     assign ac = 2'b01;
                     assign display = 2;
                     assign doorOpen = 0;
                 end
                 else if (reg_f[3] || reg_u[3] || reg_d[3]) begin
-                    state = 3;
+                    next_state = 3;
                     assign ac = 2'b10;
                     assign display = 2;
                     assign doorOpen = 0;
@@ -190,7 +191,7 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display
 
             9: begin
                 if (reg_f[1] || reg_u[1] || reg_d[1]) begin
-                    state = 0;
+                    next_state = 0;
                     assign ac = 2'b00;
                     assign display = 1;
                     assign doorOpen = 1;
@@ -199,7 +200,7 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display
                     reg_d[1] = 0;
                 end
                 else if (reg_f[2] || reg_f[3] || reg_d[2] || reg_d[3] || reg_u[2] || reg_u[3]) begin
-                    state = 1;
+                    next_state = 1;
                     assign ac = 2'b10;
                     assign display = 1;
                     assign doorOpen = 0;
@@ -208,7 +209,7 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display
 
             10: begin
                 if (reg_f[3] || reg_u[3] || reg_d[3]) begin
-                    state = 4;
+                    next_state = 4;
                     assign ac = 2'b00;
                     assign display = 3;
                     assign doorOpen = 1;
@@ -217,7 +218,7 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display
                     reg_d[3] = 0;
                 end
                 else if (reg_f[1] || reg_f[2] || reg_d[1] || reg_d[2] || reg_u[1] || reg_u[2]) begin
-                    state = 5;
+                    next_state = 5;
                     assign ac = 2'b01;
                     assign display = 3;
                     assign doorOpen = 0;
@@ -226,25 +227,34 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display
 
             11: begin
                 if (reg_f[3] || reg_u[3] || reg_d[3]) begin
-                    state = 2;
+                    next_state = 2;
                     assign ac = 2'b00;
                     assign display = 2;
                     assign doorOpen = 1;
                 end
                 else if (reg_f[1] || reg_d[1] || reg_u[1]) begin
-                    state = 6;
+                    next_state = 6;
                     assign ac = 2'b00;
                     assign display = 2;
                     assign doorOpen = 1;
                 end
                 else begin 
-                    state = 8;
+                    next_state = 8;
                     assign ac = 2'b00;
                     assign display = 2;
                     assign doorOpen = 0;
                 end
             end
         endcase
+
+        if (rst) begin
+            next_state = 9;
+            assign ac = 2'b00;
+            assign display = 1;
+            assign doorOpen = 0;
+        end
+        
+        state = next_state;
     end
 
 endmodule

@@ -5,9 +5,9 @@ module elevator_tb ();
     wire [1:0] display;
     wire doorOpen;
 
-    reg s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk;
+    reg s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, rst;
 
-    elevator elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, ac, display, doorOpen); 
+    elevator elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, rst, ac, display, doorOpen); 
 
     initial begin 
         forever begin
@@ -16,6 +16,7 @@ module elevator_tb ();
     end
 
     initial begin
+        rst = 0;
         clk = 0;
         s1 = 0;
         s2 = 0;
@@ -49,6 +50,10 @@ module elevator_tb ();
         #50 u2 = 1; #1 u2 = 0; // another user pressed up button in floor 2
         #50 s2 = 1; #1 s2 = 0; // elevator arrived at floor 2
         #100 s3 = 1; #1 s3 = 0; // elevator arrived at floor 3
+
+        // test case 4
+        #30
+        rst = 1; #50 rst = 0; // reset
     end
 
 endmodule
