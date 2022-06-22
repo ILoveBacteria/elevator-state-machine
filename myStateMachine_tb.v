@@ -53,7 +53,10 @@ module elevator_tb ();
 
         // test case 4
         #30
-        rst = 1; #50 rst = 0; // reset
+        rst = 1; // reset
+        #20
+        d3 = 1; #1 d3 = 0; // user pressed down button in floor 3
+        #20 rst = 0;
     end
 
 endmodule

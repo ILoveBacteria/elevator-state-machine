@@ -11,15 +11,15 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, rst, ac, di
     reg [3:0] state = 9;
     reg [3:0] next_state = 9;
 
-    always @(posedge f1) reg_f[1] = 1;
-    always @(posedge f2) reg_f[2] = 1;
-    always @(posedge f3) reg_f[3] = 1;
-    always @(posedge u1) reg_u[1] = 1;
-    always @(posedge u2) reg_u[2] = 1;
-    always @(posedge u3) reg_u[3] = 1;
-    always @(posedge d1) reg_d[1] = 1;
-    always @(posedge d2) reg_d[2] = 1;
-    always @(posedge d3) reg_d[3] = 1;
+    always @(posedge f1) if (!rst) reg_f[1] = 1;
+    always @(posedge f2) if (!rst) reg_f[2] = 1;
+    always @(posedge f3) if (!rst) reg_f[3] = 1;
+    always @(posedge u1) if (!rst) reg_u[1] = 1;
+    always @(posedge u2) if (!rst) reg_u[2] = 1;
+    always @(posedge u3) if (!rst) reg_u[3] = 1;
+    always @(posedge d1) if (!rst) reg_d[1] = 1;
+    always @(posedge d2) if (!rst) reg_d[2] = 1;
+    always @(posedge d3) if (!rst) reg_d[3] = 1;
 
     always @(posedge clk, posedge s1, posedge s2, posedge s3, rst) begin
         case (state)
@@ -253,7 +253,7 @@ module elevator(s1, s2, s3, f1, f2, f3, u1, u2, u3, d1, d2, d3, clk, rst, ac, di
             assign display = 1;
             assign doorOpen = 0;
         end
-        
+
         state = next_state;
     end
 
