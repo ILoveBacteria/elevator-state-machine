@@ -3,3 +3,5 @@ transcript
 *.mti
 *.wlf
 /elevator
+/stateDiagram/StateDiagram.pdf
+/stateDiagram/StateDiagram.drawio
