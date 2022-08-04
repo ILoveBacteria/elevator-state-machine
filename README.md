@@ -1,5 +1,13 @@
 # Elevator State Machine
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Issues](https://img.shields.io/github/issues/ILoveBacteria/elevator-state-machine)](https://github.com/ILoveBacteria/elevator-state-machine/issues)
+[![Forks](https://img.shields.io/github/forks/ILoveBacteria/elevator-state-machine)](https://github.com/ILoveBacteria/elevator-state-machine/network/members)
+[![Stars](https://img.shields.io/github/stars/ILoveBacteria/elevator-state-machine)]()
+[![Latest release](https://img.shields.io/github/release/ILoveBacteria/elevator-state-machine)](https://github.com/ILoveBacteria/elevator-state-machine/releases)
+[![Watchers](https://img.shields.io/github/watchers/ILoveBacteria/elevator-state-machine)]()
+[![Last commit](https://img.shields.io/github/last-commit/ILoveBacteria/elevator-state-machine)](https://github.com/ILoveBacteria/elevator-state-machine/commits/master)
+
 ![thumbnail](https://github.com/ILoveBacteria/elevator-state-machine/blob/master/assets/elevator-thumbnail.jpg)
 
 ## Description
